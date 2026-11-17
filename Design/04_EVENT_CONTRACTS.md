@@ -1,11 +1,14 @@
 # 04 — Interaction and Event Contracts (DRAFT)
 
+> **OWNER DECISION — 2026-11-17:** D-01 **APPROVED**: standalone `nguyenbui5701/OnlineChurch` repository with independent runtime, selectively adapting OnlinePagoda technology. D-04 **APPROVED**: Catholic (Công giáo) identity. The new repository is not yet created/accessibly linked; this is a **temporary Design staging branch**, not permission to merge church code into OnlinePagoda `main`. Remaining interactions, visuals, rollout and complete Design sign-off are pending. See `08_DECISION_LOG.md` and `10_ONLINECHURCH_REPO_MIGRATION.md`.
+
+
 ## 1. Input trust boundary
 Incoming TikTok data is untrusted; adapt only `chat`, `member`, `gift`, `like`, and `roomUser` initially, following existing `apps/server/src/tiktok/mapper.ts`. Validate ID lengths, chat length, gift count and price bounds; bind to current room/connection epoch; reject historical/wrong-room events; do not trust gift names as monetary values.
 
 Represent each input as a **single sanitized envelope** with room + connection epoch + actor identity + event ID or conservative synthetic dedupe key. Treat missing stable IDs as a risk: ignore for transaction accounting when exact-once cannot be assured. Progress updates for a TikTok combo are not yet final gifts.
 
-## 2. Draft command grammar
+## 2. Draft Catholic-safe command grammar (not liturgy)
 | Canonical intent | Accepted examples (case/diacritic insensitive) | Animation |
 |---|---|---|
 | ENTER | `vào nhà thờ`, `xin chỗ`, `ngồi` | Welcome/seat |
@@ -39,3 +42,9 @@ Not allowed: "Bạn đã được tha tội", "Tặng quà để được cầu 
 
 ## 5. Failure cases to simulate
 Duplicate packet, out-of-order gift progress/end, missing ID, stale room event, rate-limit, worker crash, broken TTS, very long/unicode nickname, profanity, floods of 100+ commands, two overlay windows claiming sound, lost socket then resync. Count drops and use silent generic fallback when uncertain; no wrong-person voice.
+
+## 6. Catholic boundary checks
+- PRAY: quiet symbolic personal reflection, not a formal liturgical prayer service or AI priest blessing.
+- LIGHT_CANDLE: a **free** virtual votive candle at a side stand; gifts cannot alter count, priority, spiritual benefits or access.
+- AMEN: a short visual acknowledgment, not a sacramental response. No avatars or gifts in altar/presbytery.
+- Operator can mute/disable gestures independently if Catholic-content review flags an issue. See `09_CATHOLIC_CONTENT_AND_SAFEGUARDS.md`.

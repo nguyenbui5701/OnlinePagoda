@@ -1,8 +1,11 @@
 # ONLINE CHURCH — Design Index
-**Status:** DRAFT — awaiting Owner approval | **Date:** 2026-11-17 | **SA branch:** `sa/onlinechurch-design-v0`
+
+> **OWNER DECISION — 2026-11-17:** D-01 **APPROVED**: standalone `nguyenbui5701/OnlineChurch` repository with independent runtime, selectively adapting OnlinePagoda technology. D-04 **APPROVED**: Catholic (Công giáo) identity. The new repository is not yet created/accessibly linked; this is a **temporary Design staging branch**, not permission to merge church code into OnlinePagoda `main`. Remaining interactions, visuals, rollout and complete Design sign-off are pending. See `08_DECISION_LOG.md` and `10_ONLINECHURCH_REPO_MIGRATION.md`.
+
+**Status:** G0 PARTIAL — Catholic & independent repository approved; remaining design choices pending | **Date:** 2026-11-17 | **SA branch:** `sa/onlinechurch-design-v0`
 
 ## Purpose and boundary
-Design a separate interactive **Nhà thờ Online** experience for TikTok LIVE on Windows, using `OnlinePagoda` as the **audited technical reference**, not as a theological or visual template. Never modify or restart the existing pagoda LIVE installation in order to test the church project.
+Design a separate interactive **Nhà thờ Online Công giáo** experience for TikTok LIVE on Windows, using `OnlinePagoda` as the **audited technical reference**, not as a theological or visual template. Never modify or restart the existing pagoda LIVE installation in order to test the church project.
 
 ### Baseline examined
 - Repo: https://github.com/nguyenbui5701/OnlinePagoda
@@ -25,10 +28,13 @@ Design a separate interactive **Nhà thờ Online** experience for TikTok LIVE o
 5. [05_AI_WORK_RULES.md](05_AI_WORK_RULES.md) — SA / AI Code / reviewer contracts
 6. [06_VISUAL_AUDIO_BRIEF.md](06_VISUAL_AUDIO_BRIEF.md) — handoff to visual/audio agent
 7. [07_TEST_RELEASE_GATES.md](07_TEST_RELEASE_GATES.md) — acceptance and LIVE safety
-8. [08_DECISION_LOG.md](08_DECISION_LOG.md) — choices still needing Owner sign-off
+8. [08_DECISION_LOG.md](08_DECISION_LOG.md) — approved decisions and open sign-offs
+9. [09_CATHOLIC_CONTENT_AND_SAFEGUARDS.md](09_CATHOLIC_CONTENT_AND_SAFEGUARDS.md) — Catholic content, imagery and devotional boundaries
+10. [10_ONLINECHURCH_REPO_MIGRATION.md](10_ONLINECHURCH_REPO_MIGRATION.md) — independent repository creation and technical porting
+11. [11_PHASE_AND_AGENT_HANDOFF.md](11_PHASE_AND_AGENT_HANDOFF.md) — phased tasks and agent handoff
 
 ## Phase plan — NOT YET APPROVED
-- **G0:** Owner chooses Christian tradition, church visual direction, desired interactions, repository/deployment model.
+- **G0:** Catholic identity and separate `OnlineChurch` repo **APPROVED 2026-11-17**. Still OPEN: visual style/Marian imagery, exact interaction list, machine deployment and final Design approval.
 - **G1:** DEMO scene + visual assets + visitor actions, no TikTok or external TTS dependency.
 - **G2:** TikTok event adapter + duplicate/streak safety + operator controls + voice and FX.
 - **G3:** Windows separate-instance capture, rehearsal, safeguards, go-live.
@@ -38,3 +44,8 @@ Design a separate interactive **Nhà thờ Online** experience for TikTok LIVE o
 
 ## Safety note
 This is an independently authored interactive artwork, **not a real parish/church, clergy, religious service, sacrament, or guaranteed spiritual benefit**. Gifts are optional appreciation and must not buy prayer, blessings, forgiveness, absolution or priority of spiritual care.
+
+## Repository migration status
+- Target is `nguyenbui5701/OnlineChurch`, **not created / accessible** on the 2026-11-17 connector check (404). This ChatGPT GitHub connection does not expose a create-repository action.
+- Do not merge temporary OnlinePagoda draft PR #1 to its live `main`; transfer Design to the new repository once Owner creates it, then retire the staging PR without merge.
+- No `Task/` is issued until the Design gate has been completed in OnlineChurch.

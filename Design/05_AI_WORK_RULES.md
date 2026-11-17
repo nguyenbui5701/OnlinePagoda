@@ -1,12 +1,15 @@
 # 05 — SA / AI Code / Reviewer Working Agreement
+
+> **OWNER DECISION — 2026-11-17:** D-01 **APPROVED**: standalone `nguyenbui5701/OnlineChurch` repository with independent runtime, selectively adapting OnlinePagoda technology. D-04 **APPROVED**: Catholic (Công giáo) identity. The new repository is not yet created/accessibly linked; this is a **temporary Design staging branch**, not permission to merge church code into OnlinePagoda `main`. Remaining interactions, visuals, rollout and complete Design sign-off are pending. See `08_DECISION_LOG.md` and `10_ONLINECHURCH_REPO_MIGRATION.md`.
+
 **Status:** mandatory process proposal for Owner approval. Folder names are case-sensitive in repo.
 
 ## 1. Role boundaries
 **Solution Architect (this chat)**
-- Primary writable scope: `Design/**`; may change `.gitignore` **only to allow Design/Task and prevent ReviewPR tracking**.
+- Primary writable scope: `Design/**` inside **OnlineChurch** after provisioning; until then, only the dedicated OnlinePagoda SA staging branch. May amend `.gitignore` solely to allow Design/Task and exclude ReviewPR.
 - Reads source to analyze; writes requirements, UI, architectural decision records, interface design and acceptance gates.
 - Commits every coherent design change on named SA branch. Never edits implementation/source in an AI Code branch.
-- After Owner approves design, creates exactly scoped `Task/TASK-xxx-*.md` including read-first files, allowed paths, steps, acceptance, test evidence and rollback. Commits task and hands off to AI Code.
+- After Owner approves remaining G0 design **and OnlineChurch repository exists**, creates exactly scoped `Task/TASK-xxx-*.md` **in OnlineChurch** including read-first files, allowed paths, steps, acceptance, test evidence and rollback. Commits task and hands off to AI Code.
 - When AI Code opens PR, reviews diff and test evidence; if local checkout is available, checks out **separate** `ReviewPR/PR-<number>/` worktree/snapshot and never touches AI Code workspace.
 - Posts one formal GitHub PR review with summary, evidence, file/line issues and outcome: **APPROVE**, **COMMENT** or **REQUEST_CHANGES**. Never approves an untested change as verified.
 - **Reject path:** retain isolated checkout and original Task; add fix checklist to that same Task and commit; AI Code responds with new commit; re-review.
@@ -42,3 +45,8 @@
 - Never modify/restart `OnlinePagoda` production processes, its port 3000, settings, data or asset cache while live.
 - All church art, text, audio, display names and moderation follow `Design/01_REQUIREMENTS.md`; no pay-to-pray mechanics.
 - A claim of PASS requires actual commands and outputs; source inspection ≠ tests.
+
+## 5. Cross-repo hard boundary
+- OnlinePagoda's `main`, production data/port 3000 and launch scripts are read-only for this project. Draft PR #1 is staging only, and must not be merged into pagoda `main` for Church implementation.
+- The implementation project of record is `nguyenbui5701/OnlineChurch` once provisioned; all future Task and AI-Code PRs belong there. Every ported source file has origin SHA, license/provenance and regression evidence.
+- Catholic iconography, prayer text and effects require content review as well as code tests. Provide Visual AI both 06 and 09 guides.

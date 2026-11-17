@@ -1,5 +1,8 @@
 # 02 — UI / UX (DRAFT)
-**Canvas:** 1080x1920 portrait for TikTok LIVE Studio Window Capture. **Theme:** warm, elegant, contemplative, not a real religious ceremony.
+
+> **OWNER DECISION — 2026-11-17:** D-01 **APPROVED**: standalone `nguyenbui5701/OnlineChurch` repository with independent runtime, selectively adapting OnlinePagoda technology. D-04 **APPROVED**: Catholic (Công giáo) identity. The new repository is not yet created/accessibly linked; this is a **temporary Design staging branch**, not permission to merge church code into OnlinePagoda `main`. Remaining interactions, visuals, rollout and complete Design sign-off are pending. See `08_DECISION_LOG.md` and `10_ONLINECHURCH_REPO_MIGRATION.md`.
+
+**Canvas:** 1080x1920 portrait for TikTok LIVE Studio Window Capture. **Theme:** Catholic-inspired, warm and contemplative; **not a real liturgy, Mass or sacrament**.
 
 ## A. Visual hierarchy (coordinates are initial layout guides, not final pixels)
 ```text
@@ -7,9 +10,9 @@
 │ 0–150   NHÀ THỜ ONLINE · DIGITAL SIMULATION     │
 │         status / counter / unobtrusive notice   │
 │                                                 │
-│ 150–1050  WINDOWS / CROSS / QUIET CHANCEL       │
+│ 150–1050  WINDOWS / CRUCIFIX / QUIET CHANCEL       │
 │           center focal point (unobstructed)     │
-│           no gifts obscuring the cross          │
+│           no gifts obscuring the crucifix          │
 │                                                 │
 │ 800–1540 CENTRAL AISLE + PEWS                   │
 │           avatar enters, sits, approaches       │
@@ -26,11 +29,11 @@ Recommended: center aisle clear (roughly x=450..630), pews in left/right banks; 
 
 ## B. Design system
 - Palette candidate: ivory #F5E9D4, dark walnut #36291F, gold #CBAA69, midnight blue #1C283C, glass jewel accents; ensure contrast.
-- Background: original fictional church interior, no real parish logo/location, focal cross. Architecturally neutral pending Catholic/Protestant selection.
+- Background: original fictional Catholic nave with a front crucifix, stained glass, pews and no real parish branding. Optional Marian side shrine requires a separate Owner decision.
 - Typography: readable Vietnamese sans-serif for UI; restrained serif for title; fonts only with verified redistribution rights.
 - Default animation: subtle light rays, movement no faster than safe readability, no flash/strobe. Gift effects cannot cover cross > 1s.
 - Audio: ambient off by default during integration, no copyrighted hymns/choir tracks unless explicitly licensed. Independent sliders for SFX, ambience and voice.
-- Emblem: a cross only pending approved denominational direction; remove imagery that suggests a real clergy officiating.
+- **Catholic identity:** front crucifix (not generic empty cross), and no priest, Eucharistic reenactment or sacred-area gift effects.
 
 ## C. Interactions (provisional)
 | Trigger | Visual | Text/audio |
@@ -52,3 +55,6 @@ Main status indicators: mode, TikTok connected/reconnecting, scene FPS, queue de
 
 ## E. Visual acceptance review
 The image agent produces: 1 background 1080x1920; separate transparent layers for cross/altar area, pews, candle stand, foreground; visitor sprite poses and visual FX; a low-res composite preview for Owner. SA signs off imagery before AI Code integrates. Generated visual is concept art until dimensions, transparency, IP rights and readability are checked.
+
+## F. Catholic UI protected areas
+The front crucifix, altar and presbytery form a **protected scene zone**. No avatars, animated gifts, artificial fire, donor names, sound-triggered flashing or visitor path can enter it. Keep devotional activity in pews or a side reflection/candle area. Visually disclose "Không gian mô phỏng — không phải Thánh lễ" in an accessible location. Confirm final text placement by recording the actual TikTok LIVE Studio vertical preview.

@@ -1,7 +1,10 @@
 # 07 — QA, Release Gates and Acceptance (DRAFT)
 
+> **OWNER DECISION — 2026-11-17:** D-01 **APPROVED**: standalone `nguyenbui5701/OnlineChurch` repository with independent runtime, selectively adapting OnlinePagoda technology. D-04 **APPROVED**: Catholic (Công giáo) identity. The new repository is not yet created/accessibly linked; this is a **temporary Design staging branch**, not permission to merge church code into OnlinePagoda `main`. Remaining interactions, visuals, rollout and complete Design sign-off are pending. See `08_DECISION_LOG.md` and `10_ONLINECHURCH_REPO_MIGRATION.md`.
+
+
 ## 1. Mandatory stages
-**Gate A — contract review:** 01–08 Design signed off; religious direction, repository and interactions decided; creator art rights recorded.
+**Gate A — contract review:** 01–11 Design signed off, OnlineChurch repo provisioned, remaining Catholic visuals/interactions confirmed and creator art rights recorded.
 **Gate B — isolated build:** on non-LIVE development copy, `npm.cmd ci`, `npm.cmd run typecheck`, `npm.cmd test`, `npm.cmd run build` with source and build directory logged. In a new repo, replace scripts only after implementation; commands from pagoda are a reference, not proof that church supports them today.
 **Gate C — demo:** no Internet/TikTok account; command fixture, queue and voice mute/fallback; no Buddhist text/assets in final church capture.
 **Gate D — adapter rehearsal:** mocked TikTok events, repeated combo, disconnected room, reconnect, duplicate event, long names; no double scoring or TTS wrong-user.
@@ -24,7 +27,7 @@
 | T11 | LIVE Studio phone viewer check | text not obscured; actual viewer hears correct audio |
 | T12 | shutdown and relaunch | only church service stopped/restarted; pagoda unaffected |
 | T13 | missing/offline art, lost overlay | recover/safe fallback with visible warning |
-| T14 | content safety scan | no parish impersonation, pay-to-pray, religious mislabeling, unlicensed music |
+| T14 | Catholic content safety scan | no Mass/sacrament reenactment, parish impersonation, pay-to-pray, sacred-area gift FX, religious mislabeling or unlicensed music |
 | T15 | regression: current pagoda baseline untouched | no source/runtime/data changes without separate explicit approval |
 
 ## 3. Evidence per PR
@@ -35,3 +38,10 @@ Operator controls: pause new LIVE actions, mute all speech/audio, disable gift F
 
 ## 5. Completion definition
 A milestone is COMPLETE only when acceptance criteria, security/content checks, relevant runtime evidence and Owner approval all exist. A PR review alone does not launch production.
+
+## 6. Additional mandatory gates
+- T16: OnlineChurch builds, starts/stops and rolls back **without modifying or restarting OnlinePagoda**; distinct ports, data, build outputs and capture titles.
+- T17: automated spatial guards + real Studio capture verify no avatar, donor label, candle/gift FX enters the protected sanctuary/crucifix region.
+- T18: free prayer/candle interaction unaffected by enabling/disabling gifts; queue fairness under flood.
+- T19: final build contains no stale Buddhist labels, quẻ/nhang ritual, temple visual/audio assets or pagoda runtime import.
+- T20: Catholic UX wording, voice and imagery reviewed according to `09_CATHOLIC_CONTENT_AND_SAFEGUARDS.md`. Build PASS alone does not satisfy content approval.

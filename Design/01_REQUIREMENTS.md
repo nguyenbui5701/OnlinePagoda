@@ -1,8 +1,11 @@
 # 01 — Product Requirements (DRAFT)
+
+> **OWNER DECISION — 2026-11-17:** D-01 **APPROVED**: standalone `nguyenbui5701/OnlineChurch` repository with independent runtime, selectively adapting OnlinePagoda technology. D-04 **APPROVED**: Catholic (Công giáo) identity. The new repository is not yet created/accessibly linked; this is a **temporary Design staging branch**, not permission to merge church code into OnlinePagoda `main`. Remaining interactions, visuals, rollout and complete Design sign-off are pending. See `08_DECISION_LOG.md` and `10_ONLINECHURCH_REPO_MIGRATION.md`.
+
 **Owner:** project owner | **SA:** ChatGPT | **Status:** proposal, not approved
 
 ## 1. Goal
-Create a dignified Vietnamese-language TikTok LIVE simulation of a church interior where visitors can enter, sit, express a prayer intention, light a **virtual decorative candle**, and receive visual acknowledgment. Retain the proven DEMO -> TikTok LIVE -> 9:16 capture workflow as a *technical* baseline, with a different user-facing identity, scripts, assets and logic.
+Create a dignified Vietnamese-language TikTok LIVE simulation of a **Catholic** church interior where visitors can enter, sit, express a prayer intention, light a **virtual decorative candle**, and receive visual acknowledgment. Retain the proven DEMO -> TikTok LIVE -> 9:16 capture workflow as a *technical* baseline, with a different user-facing identity, scripts, assets and logic.
 
 ## 2. Roles and primary journeys
 - **Viewer (free):** comment `vào nhà thờ` or `xin chỗ` to enter; `cầu nguyện` / `bình an` to trigger a short respectful kneeling/reflection animation; `thắp nến` to place a virtual light; `amen` to display a gentle response. Vietnamese with/without diacritics.
@@ -13,7 +16,7 @@ Create a dignified Vietnamese-language TikTok LIVE simulation of a church interi
 ## 3. Candidate MVP features
 | ID | Priority | Requirement | Observable acceptance |
 |---|---|---|---|
-| R-01 | P0 | 1080x1920 church scene with cross, central aisle, pews, windows, quiet natural lighting | Church-only assets; no Buddhist labels, offerings or animations |
+| R-01 | P0 | 1080x1920 fictional Catholic-style church with front crucifix, pews, center aisle and stained glass | Catholic iconography approved; no Buddhist words, offerings, rituals or reused temple scene assets |
 | R-02 | P0 | DEMO starts offline, no automatic TikTok connect | Test actions with zero external credentials |
 | R-03 | P0 | Viewer entrance + seat/standing state and one action at a time | Same actor not duplicated by repeated events |
 | R-04 | P0 | FREE pray and virtual candle commands; respectful bounded queue | No payment required; no guaranteed miracle/healing promises |
@@ -29,7 +32,7 @@ Create a dignified Vietnamese-language TikTok LIVE simulation of a church interi
 
 ## 4. Religion, authenticity and monetization boundaries
 - **Do not imply official affiliation** with a church, diocese, ministry, cleric or denomination unless authorized.
-- No AI priest/pastor impersonation or imitation of identifiable real clergy; no counterfeit liturgy or blessing for sale.
+- No clergy impersonation, virtual Mass, Eucharist, confession, absolution, simulated sacramental blessing or counterfeit liturgy.
 - Never connect gifts/coins to forgiveness, prayer efficacy, healing, divine favor, candle priority or access to core acts.
 - Avoid public display or narration of sensitive free-form prayer intentions by default. Proposed MVP shows only predefined safe templates, not raw user messages.
 - Avoid unlicensed hymns, devotional recordings, church photographs, stained-glass art, brand marks and third-party likenesses. Any chosen scripture translation needs its own rights review.
@@ -48,3 +51,10 @@ Real church service, confession, Mass/Eucharist, donation collection on behalf o
 
 ## 7. Acceptance gate
 No `Task/` creation before Owner approves `08_DECISION_LOG.md`. Aesthetic mockups and gifts are **illustrative proposals**, not commitments.
+
+## Catholic-specific product constraints
+- The altar/presbytery/crucifix is a protected non-interactive zone. Visitors remain in pews, aisle or approved side devotional area.
+- A virtual votive candle and prayer reflection are free symbolic visual actions, never sacramental or sold in exchange for TikTok gifts.
+- Marian artwork is an **optional Catholic content choice still pending Owner approval**; do not treat it as already signed off.
+- Never auto-read private prayer petitions aloud or imply that gifts affect divine favor.
+- See `09_CATHOLIC_CONTENT_AND_SAFEGUARDS.md` for stricter acceptance checks.
