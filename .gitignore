@@ -18,6 +18,10 @@
 !/docs/
 !/chuaonl_2027_que/
 !/stage4_assets/
+# SA design and approved AI-Code tasks are tracked. PR review checkouts are local only.
+!/Design/
+!/Task/
+/ReviewPR/
 /stage4_assets/*
 !/stage4_assets/incoming/
 /stage4_assets/incoming/*
