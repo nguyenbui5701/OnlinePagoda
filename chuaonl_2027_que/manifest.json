@@ -1,0 +1,20 @@
+{
+  "title": "Chùa Online Đinh Mùi 2027 — 576 quẻ gốc",
+  "expected": 576,
+  "files": {
+    "XEM_THU_QUE_2027.html": "b06b52ac5e94833950330e06baa4e09ef27cd6b687d83c344014b80dd7dac089",
+    "README.md": "62a4dee3711597bbcd73321014cd34a9d4f20627e7d62c443485f1934fd73538",
+    "docs/MAU_LOI_DAN_VA_LOI_CHUC_LIVE.md": "cbd5a5da16c8743b2f12ddc250023c82ca05b07029f9acbe9e55526190edbb4c",
+    "docs/HUONG_DAN_NGUOI_XEM.md": "3f9ea1f57bc3782063b8769840af3d2a48e7dbf7199598b5a6313e7700f94d1e",
+    "docs/PROMPT_GUI_CODEX.txt": "a8851bd82d162e372de7b0e32bf69a8b0597d84d74de1154560582823b22133b",
+    "docs/BRIEF_CODEX_TICH_HOP.md": "e420430eb6785efcd5915b52c81e7b90c4536fa772c83a42bee7f666c58f4688",
+    "tests/TEST_RESULTS.txt": "06d93d8a08f85a0c8f9c313fb93586bb8f7ae2d10c5c730e0698658c9b1951bc",
+    "tests/fortune.test.mjs": "bd9d0cedb06b236c02f5db7e7e5029cc4f862155d0606c0f3325edcddd7ea07f",
+    "tools/make_demo.py": "08a1d2f9b6af05f50750b58c672dc12794410e24a46fb05ac46630b58633e377",
+    "tools/build_data.py": "1f1ceddb121b23a6a48036c782f238f393a43792974c636f75ecfb8917d03f82",
+    "src/fortune-core.mjs": "2e2f8a69f17ae09dbfa0051d5442181a9dd90dd6ba1bef32fe92c8cc4f2f0b7d",
+    "data/que_dinh_mui_2027_576.json": "ac229bf6539677451327afad5ad2c42b9a6d462304d0c33482a4ad6089fd88a6",
+    "data/index_themes.json": "972ff0e2316b572e0e85c3027d35afda9eb878887865ab33230767aa98947368",
+    "data/que_dinh_mui_2027_576.csv": "5eaa78ec3b3d6abdc35c018faeee5342ceb4ff9b3edb44baf9ce9215e359cfb1"
+  }
+}

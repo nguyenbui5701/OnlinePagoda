@@ -1,0 +1,11 @@
+import { build as viteBuild } from 'vite';
+import { build as bundle } from 'esbuild';
+import { resolve } from 'node:path';
+import { copyFile, mkdir } from 'node:fs/promises';
+const directory = resolve(process.env.APP_BUILD_DIRECTORY || 'dist');
+for (const name of ['dashboard', 'overlay']) await viteBuild({ configFile: resolve(`apps/${name}/vite.config.ts`), build: { outDir: resolve(directory, name) } });
+await bundle({ entryPoints: ['apps/server/src/index.ts'], bundle: true, platform: 'node', format: 'esm', external: ['express', 'socket.io', 'vite', 'dotenv/config', 'zod'], outfile: resolve(directory, 'server.mjs') });
+await bundle({ entryPoints: ['apps/server/src/tiktok/worker.ts'], bundle: true, platform: 'node', format: 'esm', external: ['tiktok-live-connector', 'zod'], outfile: resolve(directory, 'tiktok-worker.mjs') });
+await mkdir(resolve(directory,'data'),{recursive:true});
+await copyFile(resolve('apps/server/src/data/que_dinh_mui_2027_576.json'),resolve(directory,'data/que_dinh_mui_2027_576.json'));
+console.log(`Build hoàn tất: ${directory}`);

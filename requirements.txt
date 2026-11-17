@@ -1,0 +1,4 @@
+# Optional dynamic Vietnamese voice: python -m pip install -r requirements.txt
+# Node/React/PixiJS dependencies are in package.json + package-lock.json (npm ci).
+# FFmpeg is a separate executable: install it and add its bin directory to PATH.
+gTTS==2.5.4

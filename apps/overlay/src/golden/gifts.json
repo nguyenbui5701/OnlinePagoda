@@ -1,0 +1,9 @@
+{
+  "mappings": [],
+  "examples": [
+    { "label": "Hoa hồng", "effect": "lotus", "enabled": false },
+    { "label": "Tim ngón tay", "effect": "candle", "enabled": false },
+    { "label": "Bó hoa", "effect": "lotus", "enabled": false },
+    { "label": "Bánh donut", "effect": "bell", "enabled": false }
+  ]
+}

@@ -1,0 +1,6 @@
+# Optional Python image inspection / Windows audio-loopback tools.
+# Not needed to start the application or use bundled audio.
+-r requirements.txt
+Pillow>=10,<13
+numpy==2.2.6
+PyAudioWPatch==0.2.12.9; sys_platform == "win32"

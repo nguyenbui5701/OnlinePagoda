@@ -1,0 +1,9 @@
+Bạn đang tiếp tục dự án CHÙA ONLINE tại D:\Vibecode\chuaonl. Hãy triển khai Bước 3.2.5J — Xin quẻ Đinh Mùi 2027 từ gói chuaonl_2027_que.zip đính kèm.
+
+BẮT BUỘC: Đầu tiên đọc docs/BRIEF_CODEX_TICH_HOP.md, README.md và mã nguồn Windows MỚI NHẤT tại apps/server/src/engine.ts, packages/shared/src/index.ts, apps/overlay/src/main.ts, apps/overlay/src/audio.ts, apps/server/src/tiktok/mapper.ts. Không dựa trên bản template Stage H/I cũ. Tạo checkpoint an toàn. Không chép đè toàn bộ file nếu chưa đối chiếu.
+
+MỤC TIÊU: 576 quẻ viết mới (384 chủ đề, 144 con giáp, 48 Tân Mùi 1991). Bình luận xin quẻ/xin xăm hoặc xin quẻ + chủ đề sẽ lấy quẻ và hiển thị lần lượt trên overlay 9:16. Đây là tính năng miễn phí, không liên quan tới quà TikTok. Không thay thời lượng dâng hương 7200ms, giọng cũ 1.5x, hiệu ứng rồng vàng, bảng công đức, giao dịch quà, hàng chờ nghi thức hoặc bảo mật phòng.
+
+Phân tích raw chat NGAY SAU Zod validation, trước khi normalizeEvent làm mất raw text; chỉ giữ fortuneIntent an toàn, không log raw chat. Nhận bằng server đã xác thực, không tin event LIVE giả từ browser. Tích hợp FortuneQueue vào server (dữ liệu JSON nạp 1 lần từ build), anti-replay và cooldown, có action FORTUNE_REVEAL riêng và reset sạch khi đổi phiên. Overlay mở thẻ quẻ 7–10 giây, không che tượng Phật, nhang, bảng công đức. Lời cảm ơn quà ưu tiên cao hơn lời đọc quẻ; mặc định quẻ có thể chỉ hiển thị chữ. Thêm toggle bật/tắt xin quẻ và phát tiếng (tắt giọng theo mặc định nếu làm phức tạp audio). Không ép người xem gửi quà. Bảo vệ hiệu năng 30 FPS; hạn 32 quẻ chờ, 1 quẻ hiển thị mỗi 7 giây.
+
+Trước bàn giao chạy node --test trên gói, npm.cmd run typecheck, npm.cmd test, npm.cmd run build, DEMO fixture và kiểm tra không trùng sự kiện. Không reset phiên đang LIVE thật. Giao file chỉnh sửa và báo cáo tiếng Việt, giải thích phần nào chưa thử được ở LIVE thật.

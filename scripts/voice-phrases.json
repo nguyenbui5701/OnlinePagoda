@@ -1,0 +1,14 @@
+{
+  "description": "Original fixed Vietnamese thank-you phrases. Approved runtime voice: audio/vi-v2; generator: generate-stage31-voice-v2.py.",
+  "phrases": {
+    "rose": "Cảm ơn bạn đã gửi hoa hồng. Xin chúc bạn bình an.",
+    "heart": "Cảm ơn bạn đã thắp ánh đèn yêu thương.",
+    "bouquet": "Xin cảm ơn bạn đã dâng hoa sen. Chúc gia đình an lành.",
+    "donut": "Cảm ơn bạn. Một tiếng chuông bình an xin được ngân lên.",
+    "offering": "Cảm ơn bạn đã gửi tấm lòng thành. Chúc mọi điều tốt đẹp.",
+    "corgi": "Xin cảm ơn bạn. Chúc bạn luôn bình an và nhiều niềm vui.",
+    "lantern": "Cảm ơn bạn đã thả hoa đăng. Mong lời chúc tốt lành lan tỏa.",
+    "lion": "Xin cảm ơn bạn với món quà đặc biệt. Chúc bạn và gia đình an lành.",
+    "generic": "Xin cảm ơn bạn đã gửi quà. Chúc bạn bình an."
+  }
+}
