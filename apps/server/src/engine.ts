@@ -1,5 +1,5 @@
 import {cardPresentation,interactionCooldownMs} from '@vuonsen/shared';
-import {groundHome,ceremonyJourney,homeRoute,prayerJourney,type Seat} from '@vuonsen/shared';
+import {groundHome,ceremonyJourney,homeRoute,prayerJourney,ritualArrival,ritualDeparture,type Seat} from '@vuonsen/shared';
 import {GroundTraffic} from './ground-traffic';
 import {CameraDirector} from './camera-director';
 import { CommentEffects } from './comment-effects';
@@ -53,6 +53,16 @@ export class SceneEngine {
   private welcomed = new Set<string>();
   private prayerCounts={completed:0,expired:0,cooldown:0,busy:0};
   private seatedCount(){return [...this.actors.values()].filter(a=>!isStanding(a)).length;}
+  private roomStatus(){
+    const all=[...this.actors.values()],seated=all.filter(a=>!isStanding(a));
+    const away=seated.filter(a=>a.travel||a.welcome?.startedAt!==undefined||a.key===this.activeRitual?.actorId||['enter','walk','exit'].includes(a.status)).length;
+    return {seated:seated.length,atSeat:seated.length-away,away,available:Math.max(0,this.settings.maxActors-seated.length),standing:all.filter(isStanding).length,visibleStanding:all.filter(a=>isStanding(a)&&a.standingSlot!==undefined).length};
+  }
+  private parkHiddenStanding(actor:Actor,now:number){
+    if(!isStanding(actor)||actor.standingSlot!==undefined||actor.key===this.activeRitual?.actorId||actor.welcome?.startedAt!==undefined)return false;
+    this.traffic.release(actor.key);delete actor.travel;delete actor.transitionFrom;
+    actor.status='standing';actor.statusAt=now;return true;
+  }
   private showStanding(actor:Actor){
     if(!isStanding(actor)||actor.standingSlot!==undefined)return;
     const visible=[...this.actors.values()].filter(a=>isStanding(a)&&a.standingSlot!==undefined);
@@ -60,7 +70,7 @@ export class SceneEngine {
     let slot=Array.from({length:20},(_,i)=>i).find(i=>!used.has(i));
     if(slot===undefined){
       const victim=visible.filter(a=>a.welcome?.startedAt===undefined&&a.key!==this.activeRitual?.actorId&&a.status!=='to-standing').sort((a,b)=>a.lastActiveAt-b.lastActiveAt)[0];
-      if(!victim)return;slot=victim.standingSlot;delete victim.standingSlot;
+      if(!victim)return;slot=victim.standingSlot;delete victim.standingSlot;this.parkHiddenStanding(victim,this.now());
     }
     actor.standingSlot=slot;
   }
@@ -69,7 +79,7 @@ export class SceneEngine {
     actor.transitionFrom=actorHome(actor);actor.seatId=`standing-${actor.key}`;
     actor.standingSince=now;actor.status='to-standing';actor.statusAt=now;
     this.waiting.delete(actor.key);this.showStanding(actor);
-    if(this.ordered)actor.travel={from:groundHome(actor.transitionFrom!),to:groundHome(actorHome(actor)),kind:'standing'};
+    if(this.ordered&&!this.parkHiddenStanding(actor,now))actor.travel={from:groundHome(actor.transitionFrom!),to:groundHome(actorHome(actor)),kind:'standing'};
   }
   private requestBow(actor:Actor,now:number,first=false){
     if(actor.welcome||actor.travel)return;
@@ -84,7 +94,7 @@ export class SceneEngine {
     for(const actor of this.actors.values()){
       const w=actor.welcome;if(!w)continue;
       if(w.startedAt!==undefined&&now-w.startedAt>=w.durationMs){delete actor.welcome;this.prayerCounts.completed++;if(w.journey){actor.status=isStanding(actor)?'standing':'idle';actor.statusAt=now;this.traffic.release(actor.key);}}
-      else if(w.startedAt===undefined&&now-w.queuedAt>=60000){delete actor.welcome;this.prayerCounts.expired++;if(this.ordered&&w.reason==='welcome'){actor.travel={from:groundHome(w.origin!),to:groundHome(actorHome(actor)),kind:isStanding(actor)?'standing':'seat'};actor.status='walk';}}
+      else if(w.startedAt===undefined&&now-w.queuedAt>=60000){delete actor.welcome;this.prayerCounts.expired++;if(this.ordered&&w.reason==='welcome'&&w.origin?.id!==actor.seatId){actor.travel={from:groundHome(w.origin!),to:groundHome(actorHome(actor)),kind:isStanding(actor)?'standing':'seat'};actor.status='walk';}}
     }
   }
   private startWelcomes(now:number){
@@ -101,6 +111,11 @@ export class SceneEngine {
       const journey=this.ordered?prayerJourney(groundHome(actor.welcome!.origin??actorHome(actor)),groundHome(actorHome(actor)),row,lane,now):undefined;
       if(journey&&!this.traffic.reserve(actor.key,[journey.outbound,journey.inbound],now,true))continue;
       occupied.add(slot);actor.welcome={...actor.welcome!,startedAt:now,lane,row,...(journey?{journey,durationMs:journey.endsAt-now}:{})};
+    }
+    // A seat is already owned. Show its owner there while waiting, instead of
+    // hiding them at the entrance and leaving an apparently empty reserved seat.
+    if(this.ordered)for(const actor of pending)if(actor.welcome?.startedAt===undefined&&actor.welcome&&!isStanding(actor)&&actor.welcome.origin?.id!==actor.seatId){
+      actor.welcome.origin=actorHome(actor);actor.status='idle';actor.statusAt=now;
     }
   }
   get ritualQueueLength() { return this.ritualQueue.length; }
@@ -155,6 +170,7 @@ export class SceneEngine {
     this.traffic.expire(now);
     for(const actor of this.actors.values()){
       const t=actor.travel;if(!t)continue;
+      if(this.parkHiddenStanding(actor,now))continue;
       if(t.route&&now>=t.route.endsAt){delete actor.travel;delete actor.transitionFrom;actor.status=t.kind==='standing'?'standing':'idle';actor.statusAt=now;this.traffic.release(actor.key);continue;}
       if(!t.route){const r=homeRoute(t.from,t.to,now,this.settings.walkSpeed);if(this.traffic.reserve(actor.key,[r],now))t.route=r;}
     }
@@ -227,6 +243,7 @@ export class SceneEngine {
     if(this.ordered)candidates.sort((a,b)=>{const rank=(s:Seat)=>{const i=Number(s.id.slice(5));return Math.floor(i/10)*10+(i%5)*2+(i%10>=5?1:0);};return rank(a)-rank(b);});
     const seat=candidates.find(s=>!occupied.has(s.id));
     if(existing){
+      if(!isStanding(existing))return false;
       if(!seat||existing.welcome||existing.travel||existing.key===this.activeRitual?.actorId||existing.status==='to-standing')return false;
       existing.transitionFrom=actorHome(existing);existing.seatId=seat.id;existing.status='walk';existing.statusAt=this.now();delete existing.standingSlot;delete existing.standingSince;
       if(this.ordered)existing.travel={from:groundHome(existing.transitionFrom),to:groundHome(seat),kind:'seat'};
@@ -349,7 +366,6 @@ export class SceneEngine {
     this.manageTravel(now);
     this.finishWelcomes(now);
     this.tree.tick(now);
-    this.giftShow.tick(now,this.settings,[this.fortunes.snapshot(now),this.lanterns.snapshot(now)].some(c=>c&&cardPresentation(c,now).visible),{settings:this.settings,camera:this.camera,fortune:this.fortunes.snapshot(now),lantern:this.lanterns.snapshot(now),tree:this.tree.snapshot()});
     this.toasts = this.toasts.filter(t => t.expiresAt > now);
     for (const [key, expiry] of this.seen) if (expiry <= now) this.seen.delete(key);
     for (const [key, expiry] of this.cooldowns) if (expiry <= now) this.cooldowns.delete(key);
@@ -380,7 +396,10 @@ export class SceneEngine {
       if(a.welcome?.startedAt===undefined&&a.key!==this.activeRitual?.actorId)this.leaveSeat(a,now);
     }
     this.startWelcomes(now);
-    for(const effect of this.commentEffects.tick(now,this.sessionId,Boolean(this.activeRitual||this.giftShow.snapshot().active.length),this.settings.commentEffectsEnabled&&this.settings.effects)){
+    // Launch accepted gifts in this tick, rather than waiting for the next tick.
+    this.giftShow.tick(now,this.settings,[this.fortunes.snapshot(now),this.lanterns.snapshot(now)].some(c=>c&&cardPresentation(c,now).visible),{settings:this.settings,camera:this.camera,fortune:this.fortunes.snapshot(now),lantern:this.lanterns.snapshot(now),tree:this.tree.snapshot()});
+    const paidOffering=this.activeRitual&&this.activeRitual.source!=='comment'&&now>=ritualArrival(this.activeRitual)&&now<ritualDeparture(this.activeRitual);
+    for(const effect of this.commentEffects.tick(now,this.sessionId,Boolean(this.giftShow.snapshot().active.length||paidOffering),this.settings.commentEffectsEnabled&&this.settings.effects)){
       if(this.actions.length<128)this.actions.push({id:++this.counter,type:'COMMENT_EFFECT',actorId:effect.actorId,at:now,commentEffect:effect});
     }
     this.lanterns.expire(now);
@@ -396,10 +415,12 @@ export class SceneEngine {
         this.actions.push({id:++this.counter,type:'FORTUNE_REVEAL',actorId:'',at:now,fortune});
       }
     }
-    while (this.waiting.size && this.seatedCount() < this.settings.maxActors) {
-      const [key, event] = this.waiting.entries().next().value!;
-      if (!this.spawn(event)) break;
-      this.waiting.delete(key);
+    for (const [key,event] of this.waiting) {
+      const actor=this.actors.get(key);
+      if(actor&&!isStanding(actor)){this.waiting.delete(key);continue;}
+      if(this.seatedCount()>=this.settings.maxActors)break;
+      // Keep a busy person's position, but do not let them block all free seats.
+      if(this.spawn(event))this.waiting.delete(key);
     }
     const cameraBusy=this.activeRitual||this.ritualQueue.length?'Đang dâng hương':this.giftShow.snapshot().active.length?'Đang trình diễn quà':this.commentEffects.snapshot().length?'Đang hiện hiệu ứng bình luận':this.fortunes.snapshot(now)||this.lanterns.snapshot(now)?'Đang đọc thẻ nội dung':this.tree.snapshot().phase==='bloom'?'Cây phúc lành đang nở':undefined;
     const giftsOnScreen=this.giftShow.snapshot().active.length;
@@ -450,6 +471,6 @@ export class SceneEngine {
   }
   snapshot(): SceneState {
     this.lanterns.expire(this.now());
-    return { movement:{enabled:this.ordered,moving:this.traffic.moving(this.now()),waiting:[...this.actors.values()].filter(a=>a.travel&&!a.travel.route||a.welcome&&a.welcome.startedAt===undefined).length,incenseQueued:this.freeIncense.length,incenseCompleted:this.incenseCounts.completed,incenseExpired:this.incenseCounts.expired,incenseCooldown:this.incenseCounts.cooldown,incenseBusy:this.incenseCounts.busy},camera:{...this.camera},giftShow:this.giftShow.snapshot(),environment:this.environment.snapshot(),tree:this.tree.snapshot(),commentEffects:this.commentEffects.snapshot(),commentEffectStatus:this.commentEffects.status(),room:{seated:this.seatedCount(),standing:[...this.actors.values()].filter(isStanding).length,visibleStanding:[...this.actors.values()].filter(a=>isStanding(a)&&a.standingSlot!==undefined).length},prayerStatus:{...this.prayerCounts,queued:[...this.actors.values()].filter(a=>a.welcome&&a.welcome.startedAt===undefined).length,active:[...this.actors.values()].filter(a=>a.welcome?.startedAt!==undefined).length}, lantern:this.lanterns.snapshot(this.now()), lanternStatus:this.lanterns.status(), fortune:this.fortunes.snapshot(this.now()), fortuneStatus:this.fortunes.status(), ...(this.activeRitual ? {ritual: {...this.activeRitual}} : {}), leaderboard: this.gifts.ranking(), recentGifts: [...this.gifts.recent], observedGifts: [...this.gifts.observed], sessionId: this.sessionId, revision: this.revision, serverTime: this.now(), settings: { ...this.settings }, actors: [...this.actors.values()].filter(a=>!isStanding(a)||a.standingSlot!==undefined).map(a => ({ ...a, ...(a.welcome?{welcome:{...a.welcome}}:{}) })), queue: this.waiting.size, total: this.participants.size, recent: [...this.recent], toasts: [...this.toasts], logs: [...this.logs], metrics: { ...this.metrics, reasons: { ...this.metrics.reasons } }, provider: this.provider, mode: this.mode, connection: { ...this.connection, received: { ...this.connection.received } } };
+    return { movement:{enabled:this.ordered,moving:this.traffic.moving(this.now()),waiting:[...this.actors.values()].filter(a=>a.travel&&!a.travel.route||a.welcome&&a.welcome.startedAt===undefined).length,incenseQueued:this.freeIncense.length,incenseCompleted:this.incenseCounts.completed,incenseExpired:this.incenseCounts.expired,incenseCooldown:this.incenseCounts.cooldown,incenseBusy:this.incenseCounts.busy},camera:{...this.camera},giftShow:this.giftShow.snapshot(),environment:this.environment.snapshot(),tree:this.tree.snapshot(),commentEffects:this.commentEffects.snapshot(),commentEffectStatus:this.commentEffects.status(),room:this.roomStatus(),prayerStatus:{...this.prayerCounts,queued:[...this.actors.values()].filter(a=>a.welcome&&a.welcome.startedAt===undefined).length,active:[...this.actors.values()].filter(a=>a.welcome?.startedAt!==undefined).length}, lantern:this.lanterns.snapshot(this.now()), lanternStatus:this.lanterns.status(), fortune:this.fortunes.snapshot(this.now()), fortuneStatus:this.fortunes.status(), ...(this.activeRitual ? {ritual: {...this.activeRitual}} : {}), leaderboard: this.gifts.ranking(), recentGifts: [...this.gifts.recent], observedGifts: [...this.gifts.observed], sessionId: this.sessionId, revision: this.revision, serverTime: this.now(), settings: { ...this.settings }, actors: [...this.actors.values()].filter(a=>!isStanding(a)||a.standingSlot!==undefined).map(a => ({ ...a, ...(a.welcome?{welcome:{...a.welcome}}:{}) })), queue: this.waiting.size, total: this.participants.size, recent: [...this.recent], toasts: [...this.toasts], logs: [...this.logs], metrics: { ...this.metrics, reasons: { ...this.metrics.reasons } }, provider: this.provider, mode: this.mode, connection: { ...this.connection, received: { ...this.connection.received } } };
   }
 }

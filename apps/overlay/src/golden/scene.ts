@@ -172,7 +172,7 @@ export async function createGoldenScene() {
       if (!active) { clearTransient(); return; }
       mats.children.forEach((c,i)=>c.visible=i<value.settings.maxActors);
       heading.text = value.settings.templeName; heading.scale.set(1); heading.scale.set(Math.min(1, 900 / heading.width));
-      counts.text = value.room?`${value.room.seated} đang ngồi   ·   ${value.room.visibleStanding} đứng ngoài   ·   ${value.queue} chờ ghế`:`${value.actors.length} đang lễ   ·   ${value.total} lượt ghé   ·   ${value.queue} đang chờ`;
+      counts.text = value.room?`${value.room.atSeat??value.room.seated} tại ghế   ·   ${value.room.away??0} đi/lễ   ·   ${value.room.visibleStanding} đứng ngoài`:`${value.actors.length} đang lễ   ·   ${value.total} lượt ghé   ·   ${value.queue} đang chờ`;
       mode.text = value.mode === 'demo' ? 'DEMO · DỮ LIỆU THỬ' : value.connection.fixture ? 'FIXTURE · KIỂM THỬ, KHÔNG PHẢI LIVE THẬT' : value.connection.status==='LIVE_CONNECTED' ? `LIVE · ${value.connection.viewers ?? '—'} khán giả (lần cập nhật cuối)` : `TIKTOK · ${value.connection.status}`;
       compact.update(value);
       left.visible = value.settings.showGiftPanel && !value.settings.compactGiftPanels; right.visible = value.settings.showThanksPanel && !value.settings.compactGiftPanels; commands.visible = value.settings.showGuide;

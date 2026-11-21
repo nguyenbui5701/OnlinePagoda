@@ -237,7 +237,7 @@ export function actorHome(actor:Actor):Seat {
   return {id:actor.seatId,x:60+(i%10)*106,y:1785+Math.floor(i/10)*76,scale:.75,side:i%10<5?'left':'right'};
 }
 export interface PrayerStatus {queued:number;active:number;completed:number;expired:number;cooldown:number;busy:number}
-export interface SceneState { room?: {seated:number;standing:number;visibleStanding:number}; prayerStatus?:PrayerStatus }
+export interface SceneState { room?: {seated:number;standing:number;visibleStanding:number;atSeat?:number;away?:number;available?:number}; prayerStatus?:PrayerStatus }
 export function applyDelta(state: SceneState, delta: SceneDelta): SceneState {
   const map = new Map(state.actors.map(a => [a.key, a]));
   delta.removed.forEach(key => map.delete(key)); delta.upserts.forEach(a => map.set(a.key, a));

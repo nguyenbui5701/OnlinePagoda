@@ -201,7 +201,6 @@ async function start() {
       const welcome=!ritualMoving?welcomePose(a,seat,now,goldenActive,floorPreview):undefined;
       if(welcome){x=welcome.x;y=welcome.y;scaleY=!goldenActive&&welcome.pose==='pray'?.664:1;view.root.alpha=1;welcomes.push({key:a.key,phase:welcome.phase,x,y});}
       if(floorPreview&&a.travel){const p=a.travel.route?sampleRoute(a.travel.route,now):a.travel.from;x=p.x;y=p.y;scaleY=1;view.root.alpha=1;}
-      if(floorPreview&&welcome?.phase==='waiting'&&a.welcome?.reason==='welcome')view.root.alpha=0;
       if(ritualMoving){
         x=ritualPose.x;y=ritualPose.y;scaleY=ritualPose.phase==='offer' ? .98-ritualPose.bow*.15 : 1;
         const p=cameraPoint(cameraView,ritualPose.x,ritualPose.y);activeOfferingPose={...ritualPose,x:p.x,y:p.y,scale:ritualPose.scale*p.scale};

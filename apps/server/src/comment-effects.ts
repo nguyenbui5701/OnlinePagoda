@@ -8,10 +8,13 @@ export class CommentEffects {
     if(this.pending.length>=16){this.counts.busy++;return;}
     this.cooldown.set(actorId,now+interactionCooldownMs);this.pending.push({actorId,displayName:cleanText(displayName)||'Khách an lành',avatarUrl:safeAvatarUrl(avatarUrl),effect,at:now});
   }
-  preempt(now:number){this.counts.preempted+=this.active.length;this.active=[];this.blockedUntil=Math.max(this.blockedUntil,now+7200);}
+  preempt(now:number){this.counts.preempted+=this.active.length;this.active=[];this.blockedUntil=Math.max(this.blockedUntil,now);}
   tick(now:number,session:string,giftBusy:boolean,enabled:boolean){
     for(const [key,end] of this.cooldown)if(end<=now)this.cooldown.delete(key);
     this.active=this.active.filter(a=>a.expiresAt>now);
+    // A queued gift may begin later than its receipt (for example after a card).
+    // Yield at actual presentation time as well as at receipt time.
+    if(giftBusy&&this.active.length)this.preempt(now);
     const fresh=this.pending.filter(p=>now-p.at<10000);this.counts.expired+=this.pending.length-fresh.length;this.pending=fresh;
     if(!enabled){this.active=[];this.pending=[];return [];}
     const emitted:CommentEffect[]=[];

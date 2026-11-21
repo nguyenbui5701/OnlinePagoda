@@ -5,7 +5,8 @@ export function CommunityPanel({state,connected,update,send}:{state?:SceneState;
   const s=state?.settings,p=state?.prayerStatus;
   const [coins,setCoins]=useState(1),[units,setUnits]=useState(1);
   return <section className="card" id="community-settings"><span className="eyebrow">CHÁNH ĐIỆN & CỘNG ĐỒNG</span><h2>Chỗ ngồi và hành lễ</h2>
-    <p>{state?.room?.seated??0} đang ngồi · {state?.room?.visibleStanding??0} đang hiện ở khu đứng · {state?.room?.standing??0} người trong danh sách đứng</p>
+    <p>{state?.room?.atSeat??state?.room?.seated??0} tại ghế · {state?.room?.away??0} đang đi/hành lễ · {state?.room?.available??Math.max(0,(s?.maxActors??100)-(state?.room?.seated??0))} ghế chưa cấp · {state?.room?.visibleStanding??0} hiện ở khu đứng</p>
+    <small>Ghế đã cấp gồm cả người đang đi hoặc hành lễ; người chờ lượt lễ ngồi tại ghế của mình. Ghế chưa cấp được nhường cho người chờ sẵn sàng, không bị chặn bởi một người đang bận.</small>
     <button disabled={!connected} onClick={()=>update({maxActors:100})}>Dùng 100 ghế</button>
     <label>Ẩn người đứng sau {s?.standingMinutes??5} phút không tương tác<input aria-label="Thời gian khu đứng" type="range" min="1" max="30" step="1" disabled={!connected} value={s?.standingMinutes??5} onChange={e=>update({standingMinutes:Number(e.target.value)})}/></label>
     <p>Hết giờ ngồi sẽ trả ghế và đứng ngoài. Gõ “vào chùa”, “ngồi”, “xin chỗ” để xin lại ghế. Chat và hiệu ứng vẫn dùng được ở khu đứng.</p>

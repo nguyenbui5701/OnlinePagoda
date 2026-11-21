@@ -12,7 +12,10 @@ export function welcomePose(actor: Actor, seat: Seat, now: number, golden=true,o
     return {...p,scale,pose:phase==='pray'?'pray' as const:phase==='settle'?'kneel' as const:'walk' as const,
       age:phase==='pray'?(now-j.arrivedAt)*1800/(j.departAt-j.arrivedAt):(now-w.startedAt!)*.5,phase};
   }
-  if(ordered&&w.startedAt===undefined){const origin=groundHome(w.origin??seat);return {...origin,pose:'idle' as const,age:0,phase:'waiting' as const};}
+  if(ordered&&w.startedAt===undefined){
+    const origin=groundHome(w.origin??seat),atChair=w.origin?.id===actor.seatId&&actor.seatId.startsWith('seat-');
+    return {...origin,pose:atChair?'kneel' as const:'idle' as const,age:0,phase:'waiting' as const};
+  }
   const index=Number(actor.seatId.replace('seat-',''))||0;
   const entrance=w.origin?(golden?goldenSeat(w.origin):w.origin):{x:250+(index%6)*116,y:1785+Math.floor((index%12)/6)*76};
   const base={...entrance,scale:seat.scale,pose:'walk' as 'walk'|'pray'|'kneel',age:0,phase:'waiting' as 'waiting'|'approach'|'pray'|'return'|'settle'};
